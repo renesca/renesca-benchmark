@@ -13,15 +13,10 @@ object Main extends App {
     db
   }
 
-  val rawREST = {
-    new RawRestService("http://localhost:7474", Some(credentials))
-  }
-
   // only proceed if database is available and empty
   val wholeGraph = renescaDb.queryWholeGraph
   if (wholeGraph.nonEmpty) {
     renescaDb.restService.actorSystem.shutdown()
-    rawREST.actorSystem.shutdown()
     sys.error("Database is not empty.")
   }
 
@@ -34,24 +29,18 @@ object Main extends App {
     }
   }
 
-  val iterations = 5
-  val times = 100
+  val iterations = 1000
   for (i <- 0 until iterations) {
-    val durationSeparate = List.fill(times) {
-      prepareAndCleanup {
-        Examples.separateQueries(renescaDb)
-      }
-    }.sum / times
-    val durationChangeTracking = List.fill(times) {
+    val durationSeparate = prepareAndCleanup {
+      Examples.separateQueries(renescaDb)
+    }
+    val durationChangeTracking =
       prepareAndCleanup {
         Examples.changeTracking(renescaDb)
       }
-    }.sum / times
-    println(durationSeparate, durationChangeTracking)
-    Thread.sleep(1000)
+    println(s"$durationSeparate, $durationChangeTracking")
   }
 
   // shut down actor systems
   renescaDb.restService.actorSystem.shutdown()
-  rawREST.actorSystem.shutdown()
 }
