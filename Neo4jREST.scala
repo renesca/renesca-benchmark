@@ -56,18 +56,18 @@ class RawRestService(val server: String, credentials: Option[BasicHttpCredential
 
   def awaitPostResponse(path: String, jsonRequest: String): JsValue = {
     val httpRequest = buildHttpPostRequest(path, jsonRequest)
-    // println(httpRequest)
+    println(httpRequest)
     val httpResponse = awaitResponse(httpRequest)
-    // println(httpResponse)
+    println(httpResponse + "\n")
     val jsonResponse = httpResponse.entity.asString
-    Json.parse(jsonResponse)
+    if (jsonResponse.nonEmpty) Json.parse(jsonResponse) else JsString("")
   }
 
   def awaitPutResponse(path: String, jsonRequest: String): JsValue = {
     val httpRequest = buildHttpPutRequest(path, jsonRequest)
-    // println(httpRequest)
+    println(httpRequest)
     val httpResponse = awaitResponse(httpRequest)
-    // println(httpResponse)
+    println(httpResponse + "\n")
     val jsonResponse = httpResponse.entity.asString
     if (jsonResponse.nonEmpty) Json.parse(jsonResponse) else JsString("")
   }
