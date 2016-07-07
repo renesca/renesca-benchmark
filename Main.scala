@@ -29,7 +29,8 @@ object Main extends App {
     }
   }
 
-  val iterations = 1000
+  val iterations = 2000
+  println("separateQueries, renescaChangeTracking")
   for (i <- 0 until iterations) {
     val durationSeparate = prepareAndCleanup {
       Examples.separateQueries(renescaDb)

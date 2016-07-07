@@ -2,11 +2,11 @@ package renesca.benchmark
 
 object Benchmark {
   def time(code: => Unit) = {
-    def now = System.currentTimeMillis
+    def now = System.nanoTime
     val start = now
     code
     val end = now
-    (end - start) / 1000.0
+    (end - start) / 1000000000.0
   }
 
   def benchmark(times: Int)(code: => Unit) = {
